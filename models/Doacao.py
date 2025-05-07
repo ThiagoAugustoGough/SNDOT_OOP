@@ -1,5 +1,8 @@
 from datetime import date
 
+## Atrelar classe as outras ##
+
+
 class Doacao:
     
     cont_doacao = 0
@@ -12,5 +15,5 @@ class Doacao:
     
     @classmethod
     def registrar_doacao(cls, status):
-        doacao = Doacao("y")
+        doacao = Doacao(status)
         return doacao

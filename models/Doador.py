@@ -97,6 +97,35 @@ class Doador(Pessoa):
         return doador
     
     @classmethod
+    def carregar_de_json(cls, lista_json):
+        for item in lista_json:
+            dados = item["dados"]
+            intencao = item["intencao"]
+
+            # Cria uma instância da classe Intencao esperada pelo método cadastrar
+            # Supondo que Intencao seja uma classe com os atributos _status e _data_intencao
+            intencao_obj = type("Intencao", (), {})()  # objeto dinâmico só com os atributos necessários
+            intencao_obj._status = intencao.get("status")
+            intencao_obj._data_intencao = intencao.get("data", "")  # "" se não estiver no JSON
+
+            cls.cadastrar(
+                nome=dados.get("nome"),
+                idade=dados.get("idade"),
+                genero=dados.get("sexo"),
+                data_nascimento=dados.get("data_nascimento"),
+                cidade_natal=dados.get("cidade_natal"),
+                estado_natal=dados.get("estado_natal"),
+                cpf=dados.get("cpf"),
+                profissao=dados.get("profissao"),
+                cidade_residencia=dados.get("cidade_residencia"),
+                estado_residencia=dados.get("estado_residencia"),
+                estado_civil=dados.get("estado_civil"),
+                contato_emergencia=dados.get("contato_emergencia"),
+                tipo_sanguineo=dados.get("tipo_sanguineo"),
+                intencao=intencao_obj
+            )
+    
+    @classmethod
     def listar(cls):
         if not cls.dict_doadores:
             print("Nenhum doador cadastrado.")

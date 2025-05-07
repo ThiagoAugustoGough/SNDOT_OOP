@@ -133,7 +133,7 @@ class AdministradorSistema(Pessoa):
             cls.dict_admins[id][dados_ou_acesso][campo] = mudanca
         
         else:
-            raise ValueError("id não foi inseriada corretamente ou nao existe")
+            raise ValueError("id não foi inseriado corretamente ou nao existe")
         
     @classmethod
     def login(cls, nome_usuario, senha):
@@ -142,6 +142,7 @@ class AdministradorSistema(Pessoa):
             acesso = info.get("acesso", {})
             if acesso.get("nome_usuario") == nome_usuario and acesso.get("senha") == senha:
                 print("Realizando Log in...")
+                cls.logado = nome_usuario
                 break
         else:
             raise ValueError("Usuario ou Senha errados")
@@ -149,6 +150,31 @@ class AdministradorSistema(Pessoa):
     @classmethod
     def logout(cls):
         cls.logado = None
+
+    @classmethod
+    def carregar_de_json(cls, json_data):
+        for admin_info in json_data:
+            dados = admin_info.get("dados", {})
+            acesso = admin_info.get("acesso", {})
+
+            try:
+                cls.cadastrar(
+                    nome=dados.get("nome"),
+                    idade=dados.get("idade"),
+                    genero=dados.get("sexo"),
+                    data_nascimento=dados.get("data_nascimento"),
+                    cidade_natal=dados.get("cidade_natal"),
+                    estado_natal=dados.get("estado_natal"),
+                    cpf=dados.get("cpf"),
+                    profissao=dados.get("profissao"),
+                    cidade_residencia=dados.get("cidade_residencia"),
+                    estado_residencia=dados.get("estado_residencia"),
+                    estado_civil=dados.get("estado_civil"),
+                    nome_usuario=acesso.get("nome_usuario"),
+                    senha=acesso.get("senha")
+                )
+            except Exception as e:
+                print(f"Erro ao carregar administrador {dados.get('nome')}: {e}")
         
     @classmethod
     def recuperar_senha(cls, nome_usuario, cpf):

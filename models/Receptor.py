@@ -122,6 +122,31 @@ class Receptor(Pessoa):
         return receptor
     
     @classmethod
+    def carregar_de_json(cls, json_data):
+        for item in json_data:
+            dados = item["dados"]
+            necessidade = item["necessidade"]
+
+            cls.cadastrar(
+                nome=dados["nome"],
+                idade=dados["idade"],
+                genero=dados["sexo"],
+                data_nascimento=dados["data_nascimento"],
+                cidade_natal=dados["cidade_natal"],
+                estado_natal=dados["estado_natal"],
+                cpf=dados["cpf"],
+                profissao=dados["profissao"],
+                cidade_residencia=dados["cidade_residencia"],
+                estado_residencia=dados["estado_residencia"],
+                estado_civil=dados["estado_civil"],
+                contato_emergencia=dados["contato_emergencia"],
+                orgao_necessario=necessidade["orgao_necessario"],
+                gravidade_condicao=necessidade["gravidade_condicao"],
+                centro_transplante_vinculado=necessidade["centro_transplante"],
+                posicao_lista_espera=necessidade["posicao_lista_espera"]
+            )
+
+    @classmethod
     def listar(cls):
         if not cls.dict_receptores:
             print("Nenhum receptor cadastrado.")
