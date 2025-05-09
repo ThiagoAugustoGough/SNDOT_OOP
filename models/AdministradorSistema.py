@@ -1,4 +1,5 @@
 from models.Pessoa import Pessoa
+from models.Validacoes import Validacoes
 import json
 
 class AdministradorSistema(Pessoa):
@@ -10,6 +11,25 @@ class AdministradorSistema(Pessoa):
     def __init__(self, nome, idade, genero, data_nascimento, cidade_natal,
                  estado_natal, cpf, profissao, cidade_residencia, estado_residencia,
                  estado_civil, nome_usuario, senha):
+        
+        """
+        Inicializa um novo administrador do sistema com os dados pessoais e de acesso.
+
+        Args:
+            nome (str): Nome completo do administrador.
+            idade (int): Idade do administrador.
+            genero (str): Gênero do administrador.
+            data_nascimento (str): Data de nascimento no formato "dd/mm/aaaa".
+            cidade_natal (str): Cidade natal.
+            estado_natal (str): Estado natal.
+            cpf (str): CPF válido.
+            profissao (str): Profissão.
+            cidade_residencia (str): Cidade de residência.
+            estado_residencia (str): Estado de residência.
+            estado_civil (str): Estado civil.
+            nome_usuario (str): Nome de usuário para login.
+            senha (str): Senha para acesso.
+        """
         
         AdministradorSistema.cont_admin += 1
         self._nome = nome
@@ -32,49 +52,34 @@ class AdministradorSistema(Pessoa):
                  estado_natal, cpf, profissao, cidade_residencia, estado_residencia,
                  estado_civil, nome_usuario, senha):
         
-        if not isinstance(nome, str):
-            raise TypeError("O nome deve ser uma string.")
+        """
+        Valida os dados e cadastra um novo administrador do sistema.
+
+        Returns:
+            AdministradorSistema: Instância criada do administrador.
         
-        #validar idade
-        if not isinstance(idade, int):
-            raise TypeError("A idade precisa ser um valor inteiro.")
-        if idade < 0:
-            raise ValueError("A idade precisa ser maior que 0.")
+        Raises:
+            ValueError: Se alguma validação falhar.
+        """
         
-        #validar genero
-        if not isinstance(genero, str):
-            raise TypeError("O genero deve ser uma string.")
+        Validacoes.validar_nome(nome)
+        Validacoes.validar_idade(idade)
+        Validacoes.validar_sexo(genero)
         
-        #validar data
-        if not isinstance(data_nascimento, str):
-            raise TypeError("A data deve ser uma string.")
+        # Validacao de idade
+        idade_baseada_data = Validacoes.validar_data_nascimento(data_nascimento)
         
-        if not isinstance(cidade_natal, str):
-            raise TypeError("A cidade natal deve ser uma string.")
+        if idade_baseada_data != idade:
+            raise ValueError("A data inserida nao condiz com a idade inserida...")
+        # Fim validacao de idade
         
-        # Validar estado natal
-        if not isinstance(estado_natal, str):
-            raise TypeError("O estado natal deve ser uma string.")
-        
-        # Validar CPF
-        if not isinstance(cpf, str):
-            raise TypeError("O CPF deve ser uma string.")
-        
-        # Validar profissão
-        if not isinstance(profissao, str):
-            raise TypeError("A profissão deve ser uma string.")
-        
-        # Validar cidade de residência
-        if not isinstance(cidade_residencia, str):
-            raise TypeError("A cidade de residência deve ser uma string.")
-        
-        # Validar estado de residência
-        if not isinstance(estado_residencia, str):
-            raise TypeError("O estado de residência deve ser uma string.")
-        
-        # Validar estado civil
-        if not isinstance(estado_civil, str):
-            raise TypeError("O estado civil deve ser uma string.")
+        Validacoes.validar_cidade(cidade_natal)
+        Validacoes.validar_estado(estado_natal)
+        Validacoes.validar_cpf(cpf)
+        Validacoes.validar_profissao(profissao)
+        Validacoes.validar_cidade(cidade_residencia)
+        Validacoes.validar_estado(estado_residencia)
+        Validacoes.valiar_estado_civil(estado_civil)
         
         
         admin = AdministradorSistema(nome, idade, genero, data_nascimento, cidade_natal,
@@ -106,6 +111,11 @@ class AdministradorSistema(Pessoa):
         
     @classmethod
     def listar(cls):
+        
+        """
+        Lista todos os administradores cadastrados com seus dados e credenciais.
+        """
+
         if not cls.dict_admins:
             print("Nenhum administrador cadastrado.")
             return
@@ -116,6 +126,17 @@ class AdministradorSistema(Pessoa):
     
     @classmethod
     def buscar(cls, id):
+        
+        """
+        Busca e exibe os dados de um administrador específico pelo ID.
+
+        Args:
+            id (str): ID do administrador.
+        
+        Raises:
+            ValueError: Se o ID não existir.
+        """
+        
         if id in cls.dict_admins.keys():
             print(json.dumps(cls.dict_admins[id], indent=4, ensure_ascii=False))
         
@@ -124,11 +145,33 @@ class AdministradorSistema(Pessoa):
     
     @classmethod
     def excluir(cls, id):
+        
+        """
+        Remove um administrador do sistema pelo ID.
+
+        Args:
+            id (str): ID do administrador.
+        """
+        
         if id in cls.dict_admins.keys():
             del cls.dict_admins[id]
     
     @classmethod
     def editar(cls, id, dados_ou_acesso, campo, mudanca): # formato do dicionario (cada receptor ter campos de dados e de necessidade) fez com que seja necessario um parametro a mais
+        
+        """
+        Edita um campo específico de um administrador.
+
+        Args:
+            id (str): ID do administrador.
+            dados_ou_acesso (str): 'dados' ou 'acesso', dependendo do tipo de informação a ser editada.
+            campo (str): Campo a ser alterado.
+            mudanca: Novo valor a ser atribuído ao campo.
+        
+        Raises:
+            ValueError: Se o ID for inválido.
+        """
+        
         if id in cls.dict_admins.keys():
             cls.dict_admins[id][dados_ou_acesso][campo] = mudanca
         
@@ -137,6 +180,17 @@ class AdministradorSistema(Pessoa):
         
     @classmethod
     def login(cls, nome_usuario, senha):
+        
+        """
+        Realiza login no sistema se as credenciais forem válidas.
+
+        Args:
+            nome_usuario (str): Nome de usuário.
+            senha (str): Senha.
+        
+        Raises:
+            ValueError: Se o nome de usuário ou senha estiverem incorretos.
+        """
         
         for _, info in cls.dict_admins.items():
             acesso = info.get("acesso", {})
@@ -149,10 +203,23 @@ class AdministradorSistema(Pessoa):
         
     @classmethod
     def logout(cls):
+        
+        """
+        Realiza logout do administrador atualmente logado.
+        """
+        
         cls.logado = None
 
     @classmethod
     def carregar_de_json(cls, json_data):
+        
+        """
+        Carrega múltiplos administradores a partir de uma lista de dados em formato JSON.
+
+        Args:
+            json_data (list): Lista de dicionários com dados e acesso de administradores.
+        """
+        
         for admin_info in json_data:
             dados = admin_info.get("dados", {})
             acesso = admin_info.get("acesso", {})
@@ -178,6 +245,21 @@ class AdministradorSistema(Pessoa):
         
     @classmethod
     def recuperar_senha(cls, nome_usuario, cpf):
+        
+        """
+        Recupera a senha de um administrador baseado no nome de usuário e CPF.
+
+        Args:
+            nome_usuario (str): Nome de usuário.
+            cpf (str): CPF do administrador.
+        
+        Returns:
+            str: Senha do administrador.
+        
+        Raises:
+            ValueError: Se o nome de usuário ou CPF estiver incorreto.
+        """
+        
         for _, info in cls.dict_admins.items():
             acesso = info.get("acesso", {})
             dados = info.get("dados", {})

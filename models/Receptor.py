@@ -1,15 +1,43 @@
 from models.Pessoa import Pessoa
+from models.Validacoes import Validacoes
 import json
 
 class Receptor(Pessoa):
+    
+    """
+    Classe que representa um receptor no sistema de transplantes, herdando de Pessoa.
+    Armazena informações pessoais e médicas necessárias para gerenciamento da fila de espera.
+    """
+    
     
     registros = []
     dict_receptores = {}
     cont_receptores = 0
     
     def __init__(self, orgao_necessario, gravidade_condicao, centro_transplante_vinculado, contato_emergencia, 
-                 posicao_lista_espera, nome, idade, genero, data_nascimento, cidade_natal, estado_natal,
+                nome, idade, genero, data_nascimento, cidade_natal, estado_natal,
                  cpf, profissao, cidade_residencia, estado_residencia, estado_civil):
+        
+        """
+        Inicializa um novo receptor com informações pessoais e necessidades médicas.
+
+        Args:
+            orgao_necessario (str): Órgão que o receptor necessita.
+            gravidade_condicao (str): Grau de gravidade da condição médica.
+            centro_transplante_vinculado (str): Nome do centro de transplante.
+            contato_emergencia (str): Telefone de emergência.
+            nome (str): Nome completo do receptor.
+            idade (int): Idade.
+            genero (str): Gênero.
+            data_nascimento (str): Data de nascimento no formato "dd/mm/aaaa".
+            cidade_natal (str): Cidade natal.
+            estado_natal (str): Estado natal.
+            cpf (str): CPF.
+            profissao (str): Profissão.
+            cidade_residencia (str): Cidade onde reside.
+            estado_residencia (str): Estado onde reside.
+            estado_civil (str): Estado civil.
+        """
         
         Receptor.cont_receptores += 1
         super().__init__(nome, idade, genero, data_nascimento, cidade_natal, estado_natal, cpf, profissao, cidade_residencia, estado_residencia, estado_civil, id = Receptor.cont_receptores)
@@ -17,83 +45,54 @@ class Receptor(Pessoa):
         self._gravidade_condicao = gravidade_condicao
         self._centro_transplante_vinculado = centro_transplante_vinculado
         self._contato_emergencia = contato_emergencia
-        self._posicao_lista_espera = posicao_lista_espera
+        # self._posicao_lista_espera = posicao_lista_espera
         self._id = f"receptor_{Receptor.cont_receptores}"
+        self._posicao_lista_espera = Receptor.cont_receptores
         
     @classmethod
     def cadastrar(cls, nome, idade, genero, data_nascimento, cidade_natal, estado_natal, cpf, profissao, cidade_residencia,
                   estado_residencia, estado_civil, orgao_necessario, gravidade_condicao, centro_transplante_vinculado, contato_emergencia, 
-                 posicao_lista_espera):
+                 ):
         
-        #validar nome
-        if not isinstance(nome, str):
-            raise TypeError("O nome deve ser uma string.")
+        """
+        Valida os dados fornecidos e cadastra um novo receptor no sistema.
+
+        Returns:
+            Receptor: Instância criada do receptor.
+
+        Raises:
+            ValueError: Se alguma validação falhar.
+        """
         
-        #validar idade
-        if not isinstance(idade, int):
-            raise TypeError("A idade precisa ser um valor inteiro.")
-        if idade < 0:
-            raise ValueError("A idade precisa ser maior que 0.")
+        Validacoes.validar_nome(nome)
+        Validacoes.validar_idade(idade)
+        Validacoes.validar_sexo(genero)
         
-        #validar genero
-        if not isinstance(genero, str):
-            raise TypeError("O genero deve ser uma string.")
         
-        #validar data
-        if not isinstance(data_nascimento, str):
-            raise TypeError("A data deve ser uma string.")
+        # idade_baseada_data = Validacoes.validar_data_nascimento(data_nascimento)
+        # if idade_baseada_data != idade:
+        #     raise ValueError("A data inserida nao condiz com a idade inserida...")
         
-        if not isinstance(cidade_natal, str):
-            raise TypeError("A cidade natal deve ser uma string.")
-        
-        # Validar estado natal
-        if not isinstance(estado_natal, str):
-            raise TypeError("O estado natal deve ser uma string.")
-        
-        # Validar CPF
-        if not isinstance(cpf, str):
-            raise TypeError("O CPF deve ser uma string.")
-        
-        # Validar profissão
-        if not isinstance(profissao, str):
-            raise TypeError("A profissão deve ser uma string.")
-        
-        # Validar cidade de residência
-        if not isinstance(cidade_residencia, str):
-            raise TypeError("A cidade de residência deve ser uma string.")
-        
-        # Validar estado de residência
-        if not isinstance(estado_residencia, str):
-            raise TypeError("O estado de residência deve ser uma string.")
-        
-        # Validar estado civil
-        if not isinstance(estado_civil, str):
-            raise TypeError("O estado civil deve ser uma string.")
-        
-        # Validar órgão necessário
-        if not isinstance(orgao_necessario, str):
-            raise TypeError("O órgão necessário deve ser uma string.")
-        
-        # Validar gravidade da condição
-        if not isinstance(gravidade_condicao, str):
-            raise TypeError("A gravidade da condição deve ser uma string.")
-        
-        # Validar centro de transplante vinculado
-        if not isinstance(centro_transplante_vinculado, str):
-            raise TypeError("O centro de transplante vinculado deve ser uma string.")
-        
-        # Validar contato de emergência
-        if not isinstance(contato_emergencia, str):
-            raise TypeError("O contato de emergência deve ser uma string.")
+        Validacoes.validar_cidade(cidade_natal)
+        Validacoes.validar_estado(estado_natal)
+        Validacoes.validar_cpf(cpf)
+        Validacoes.validar_profissao(profissao)
+        Validacoes.validar_cidade(cidade_residencia)
+        Validacoes.validar_estado(estado_residencia)
+        Validacoes.valiar_estado_civil(estado_civil)
+        Validacoes.validar_orgao(orgao_necessario)
+        Validacoes.validar_gravidade(gravidade_condicao)
+        Validacoes.validar_centro_transplante(centro_transplante_vinculado)
+        Validacoes.validar_telefone(contato_emergencia)
         
         # Validar posição na lista de espera
-        if not isinstance(posicao_lista_espera, int):
-            raise TypeError("A posição na lista de espera deve ser um número inteiro.")
-        if posicao_lista_espera < 0:
-            raise ValueError("A posição na lista de espera deve ser maior ou igual a 0.")
+        # if not isinstance(posicao_lista_espera, int):
+        #     raise TypeError("A posição na lista de espera deve ser um número inteiro.")
+        # if posicao_lista_espera < 0:
+        #     raise ValueError("A posição na lista de espera deve ser maior ou igual a 0.")
         
         receptor = Receptor(orgao_necessario, gravidade_condicao, centro_transplante_vinculado, contato_emergencia, 
-                 posicao_lista_espera, nome, idade, genero, data_nascimento, cidade_natal, estado_natal,
+                 nome, idade, genero, data_nascimento, cidade_natal, estado_natal,
                  cpf, profissao, cidade_residencia, estado_residencia, estado_civil)
         
         cls.dict_receptores[receptor._id] = {
@@ -123,6 +122,14 @@ class Receptor(Pessoa):
     
     @classmethod
     def carregar_de_json(cls, json_data):
+        
+        """
+        Carrega múltiplos receptores a partir de uma lista de dados em JSON.
+
+        Args:
+            json_data (list): Lista de dicionários com informações dos receptores.
+        """
+        
         for item in json_data:
             dados = item["dados"]
             necessidade = item["necessidade"]
@@ -142,12 +149,16 @@ class Receptor(Pessoa):
                 contato_emergencia=dados["contato_emergencia"],
                 orgao_necessario=necessidade["orgao_necessario"],
                 gravidade_condicao=necessidade["gravidade_condicao"],
-                centro_transplante_vinculado=necessidade["centro_transplante"],
-                posicao_lista_espera=necessidade["posicao_lista_espera"]
+                centro_transplante_vinculado=necessidade["centro_transplante"]
             )
 
     @classmethod
     def listar(cls):
+        
+        """
+        Lista todos os receptores cadastrados no sistema.
+        """
+        
         if not cls.dict_receptores:
             print("Nenhum receptor cadastrado.")
             return
@@ -156,6 +167,20 @@ class Receptor(Pessoa):
         
     @classmethod
     def editar(cls, id, dados_ou_necessidade, campo, mudanca): # formato do dicionario (cada receptor ter campos de dados e de necessidade) fez com que seja necessario um parametro a mais
+        
+        """
+        Edita um campo específico de um receptor cadastrado.
+
+        Args:
+            id (str): ID do receptor.
+            dados_ou_necessidade (str): 'dados' ou 'necessidade', dependendo da categoria da informação.
+            campo (str): Nome do campo a ser alterado.
+            mudanca: Novo valor para o campo.
+
+        Raises:
+            ValueError: Se o ID não existir.
+        """
+        
         if id in cls.dict_receptores.keys():
             cls.dict_receptores[id][dados_ou_necessidade][campo] = mudanca
         
@@ -165,6 +190,17 @@ class Receptor(Pessoa):
     
     @classmethod
     def buscar(cls, id):
+        
+        """
+        Exibe as informações de um receptor com base no ID.
+
+        Args:
+            id (str): ID do receptor.
+
+        Raises:
+            ValueError: Se o ID não existir.
+        """
+        
         if id in cls.dict_receptores.keys():
             print(json.dumps(cls.dict_receptores[id], indent=4, ensure_ascii=False))
         
@@ -173,5 +209,65 @@ class Receptor(Pessoa):
         
     @classmethod
     def excluir(cls, id):
+        
+        """
+        Remove um receptor do sistema com base no ID.
+
+        Args:
+            id (str): ID do receptor.
+        """
+        
         if id in cls.dict_receptores.keys():
             del cls.dict_receptores[id]
+            
+    @classmethod
+    def obter_receptor_por_id(cls, id):
+        
+        """
+        Retorna uma instância da classe Receptor reconstruída a partir do dicionário `dict_receptores`.
+
+        Args:
+            id (str): ID do receptor.
+
+        Returns:
+            Receptor: Instância do receptor com os dados preenchidos.
+
+        Raises:
+            ValueError: Se o ID não for encontrado no dicionário.
+        """
+        
+        if id not in cls.dict_receptores:
+            raise ValueError("ID do receptor não encontrado.")
+
+        dados = cls.dict_receptores[id]["dados"]
+        necessidade = cls.dict_receptores[id]["necessidade"]
+
+        # Cria a instância sem chamar __init__
+        receptor = cls.__new__(cls)
+
+        # Inicializa manualmente a parte da superclasse (Pessoa)
+        Pessoa.__init__(
+            receptor,
+            nome=dados["nome"],
+            idade=dados["idade"],
+            genero=dados["sexo"],
+            data_nascimento=dados["data_nascimento"],
+            cidade_natal=dados["cidade_natal"],
+            estado_natal=dados["estado_natal"],
+            cpf=dados["cpf"],
+            profissao=dados["profissao"],
+            cidade_residencia=dados["cidade_residencia"],
+            estado_residencia=dados["estado_residencia"],
+            estado_civil=dados["estado_civil"],
+            id=id
+        )
+
+        # Define os atributos específicos de Receptor
+        receptor._orgao_necessario = necessidade["orgao_necessario"]
+        receptor._gravidade_condicao = necessidade["gravidade_condicao"]
+        receptor._centro_transplante_vinculado = necessidade["centro_transplante"]
+        receptor._contato_emergencia = dados["contato_emergencia"]
+        receptor._posicao_lista_espera = necessidade["posicao_lista_espera"]
+        receptor._id = id
+
+        return receptor

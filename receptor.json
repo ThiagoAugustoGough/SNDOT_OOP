@@ -16,10 +16,9 @@
             "tipo_sanguineo": "O+"
         },
         "necessidade": {
-            "orgao_necessario": "Ossos",
+            "orgao_necessario": "pele",
             "gravidade_condicao": "Leve",
-            "centro_transplante": "Rio de Janeiro",
-            "posicao_lista_espera": 136
+            "centro_transplante": "Rio de Janeiro"
         }
     },
     {
@@ -41,8 +40,7 @@
         "necessidade": {
             "orgao_necessario": "Sangue de Cordão Umbilical",
             "gravidade_condicao": "Crítica",
-            "centro_transplante": "Teresina",
-            "posicao_lista_espera": 4
+            "centro_transplante": "Teresina"
         }
     },
     {
@@ -64,8 +62,7 @@
         "necessidade": {
             "orgao_necessario": "Intestino",
             "gravidade_condicao": "Crítica",
-            "centro_transplante": "Recife",
-            "posicao_lista_espera": 412
+            "centro_transplante": "Recife"
         }
     },
     {
@@ -87,8 +84,7 @@
         "necessidade": {
             "orgao_necessario": "Medula Óssea",
             "gravidade_condicao": "Grave",
-            "centro_transplante": "Porto Alegre",
-            "posicao_lista_espera": 47
+            "centro_transplante": "Porto Alegre"
         }
     },
     {
@@ -110,8 +106,7 @@
         "necessidade": {
             "orgao_necessario": "Tendões",
             "gravidade_condicao": "Leve",
-            "centro_transplante": "Goiânia",
-            "posicao_lista_espera": 500
+            "centro_transplante": "Goiânia"
         }
     },
     {
@@ -133,8 +128,7 @@
         "necessidade": {
             "orgao_necessario": "Coração",
             "gravidade_condicao": "Grave",
-            "centro_transplante": "Curitiba",
-            "posicao_lista_espera": 307
+            "centro_transplante": "Curitiba"
         }
     },
     {
@@ -156,8 +150,7 @@
         "necessidade": {
             "orgao_necessario": "Fígado",
             "gravidade_condicao": "Moderada",
-            "centro_transplante": "João Pessoa",
-            "posicao_lista_espera": 469
+            "centro_transplante": "João Pessoa"
         }
     },
     {
@@ -179,8 +172,7 @@
         "necessidade": {
             "orgao_necessario": "Cartilagem",
             "gravidade_condicao": "Grave",
-            "centro_transplante": "João Pessoa",
-            "posicao_lista_espera": 363
+            "centro_transplante": "João Pessoa"
         }
     },
     {
@@ -202,8 +194,7 @@
         "necessidade": {
             "orgao_necessario": "Coração",
             "gravidade_condicao": "Crítica",
-            "centro_transplante": "Rio Branco",
-            "posicao_lista_espera": 313
+            "centro_transplante": "Rio Branco"
         }
     },
     {
@@ -225,8 +216,7 @@
         "necessidade": {
             "orgao_necessario": "Válvulas cardíacas",
             "gravidade_condicao": "Leve",
-            "centro_transplante": "Goiânia",
-            "posicao_lista_espera": 34
+            "centro_transplante": "Goiânia"
         }
     }
 ]
